@@ -31,7 +31,7 @@ class NumberSquare
         $this->draw();
     }
 
-    public function getUserRange()
+    private function getUserRange()
     {
         while (true) {
             $min = readline("Min: ");
@@ -49,7 +49,7 @@ class NumberSquare
                 continue;
             }
             if ($this->min >= $max) {
-                echo "Max cannot be larger than min!\n";
+                echo "Max cannot be smaller than min!\n";
                 continue;
             }
             $this->max = (int)$max;
@@ -59,13 +59,11 @@ class NumberSquare
 
     private function draw()
     {
-        for ($row = 1; $row <= $this->max - $this->min; $row++) {
-            for ($col = $this->min; $col <= $this->max; $col++) {
-                $value = $col + $row - 1;
-                if ($value > $this->max) {
-                    $value = $value - $this->max + $this->min - 1;
-                }
-                echo $value;
+        $delta = $this->max - $this->min + 1;
+        for ($row = 0; $row < $delta; $row++) {
+            for ($col = 0; $col < $delta; $col++) {
+                echo ($col + $row) % $delta + $this->min;
+                echo " ";
             }
             echo "\n";
         }

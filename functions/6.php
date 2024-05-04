@@ -14,9 +14,9 @@ function double(int $value): int
 $elements = [1, 2, 3, 0.25, "text"];
 
 $elementCount = 0;
-foreach ($elements as $element) {
-    if (is_integer($element)) {
-        echo double($element) . "\n";
+for ($i = 0; $i < count($elements); $i++) {
+    if (is_integer($elements[$i])) {
+        echo double($elements[$i]) . "\n";
     }
     $elementCount += 1;
 }

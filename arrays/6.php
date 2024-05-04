@@ -5,8 +5,10 @@ class Hangman
     private array $word;
     private array $guessedWord;
     private array $misses;
-    private bool $win;
     private int $guessCount;
+    private int $lives;
+    private bool $win;
+    private bool $lose;
 
     function __construct()
     {
@@ -15,7 +17,7 @@ class Hangman
 
     private function initialize()
     {
-        $words = ["bongo", "guitar", "piano", "overcomplicated"];
+        $words = ["bongo", "guitar", "piano", "overcomplicated", "occult", "foobar"];
         $chosenWord = strtoupper($words[rand(0, count($words) - 1)]);
         $this->word = str_split($chosenWord);
         $this->guessedWord = [];
@@ -24,16 +26,20 @@ class Hangman
         }
         $this->misses = [];
         $this->win = false;
+        $this->lose = false;
         $this->guessCount = 0;
+        $this->lives = 5;
     }
 
-    private function displayWinStatus()
+    private function displayLoseStatus()
+    {
+        echo "You lost! RIP\n";
+        $this->promptPlayAgain();
+    }
+
+    private function promptPlayAgain(): void
     {
         while (true) {
-            $missCount = count($this->misses);
-            $hitRate = ($this->guessCount === 0) ? 0 : round(100 * ($this->guessCount - $missCount) / $this->guessCount);
-            echo "Congratulations, you won!\n";
-            echo "Correct guess rate - $hitRate%!\n";
             echo "0) Play again\n";
             echo "1) Quit\n";
             $action = readline("Action: ");
@@ -70,12 +76,17 @@ class Hangman
                 $this->displayWinStatus();
                 break;
             }
+            if ($this->lose) {
+                $this->displayLoseStatus();
+                break;
+            }
             $response = $this->promptUser();
             if (!$response) {
                 continue;
             }
             $this->checkInput($response);
             $this->checkWin();
+            $this->checkLose();
         }
     }
 
@@ -95,7 +106,24 @@ class Hangman
         foreach ($this->misses as $char) {
             echo "$char";
         }
+
         echo "\n\n";
+
+        echo "HP ";
+        echo "|";
+        echo str_repeat("=", $this->lives);
+        echo "|";
+
+        echo "\n\n";
+    }
+
+    private function displayWinStatus()
+    {
+        $missCount = count($this->misses);
+        $hitRate = ($this->guessCount === 0) ? 0 : round(100 * ($this->guessCount - $missCount) / $this->guessCount);
+        echo "Congratulations, you won!\n";
+        echo "Correct guess rate - $hitRate%!\n";
+        $this->promptPlayAgain();
     }
 
     private function promptUser()
@@ -113,10 +141,11 @@ class Hangman
         return strtoupper($response);
     }
 
-    private function checkInput($input)
+    private function checkInput($input): void
     {
         if (in_array($input, $this->misses) || in_array($input, $this->guessedWord)) {
             echo "You already guessed this character!\n";
+            return;
         }
         $guessCountIncremented = false;
         if (in_array($input, $this->word)) {
@@ -131,6 +160,7 @@ class Hangman
             }
         } else {
             $this->misses[] = $input;
+            $this->lives -= 1;
             $this->guessCount++;
         }
     }
@@ -139,6 +169,13 @@ class Hangman
     {
         if (!in_array("_", $this->guessedWord)) {
             $this->win = true;
+        }
+    }
+
+    private function checkLose()
+    {
+        if ($this->lives <= 0) {
+            $this->lose = true;
         }
     }
 }

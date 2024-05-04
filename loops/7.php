@@ -21,7 +21,7 @@ class RollTwoDice
     public function play()
     {
         $this->promptUser();
-        $this->rollUntil($this->desiredSum);
+        $this->rollUntilMatch();
     }
 
     private function promptUser()
@@ -43,7 +43,7 @@ class RollTwoDice
         }
     }
 
-    private function rollUntil($number)
+    private function rollUntilMatch()
     {
         while (true) {
             $firstDie = rand(1, 6);

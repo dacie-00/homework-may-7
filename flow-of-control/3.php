@@ -2,7 +2,7 @@
 
 //Exercise #3
 //
-//Write a program that reads a positive integer and count the number of digits the number has.
+//Write a program that reads an positive integer and count the number of digits the number has.
 
 while (true) {
     $number = readline("Enter the number: ");
@@ -16,7 +16,6 @@ while (true) {
     }
     break;
 }
-
-$digits = count(str_split($number));
+$digits = strlen((string)$number);
 $s = $digits > 1 ? "s" : "";
 echo "The number has $digits digit{$s}.\n";

@@ -17,14 +17,14 @@ class FizzBuzz
     {
     }
 
-    public static function fizzBuzz(int $count)
+    public static function fizzBuzz(int $count): void
     {
         for ($i = 1; $i <= $count; $i++) {
             $fizz = $i % 3 === 0;
             $buzz = $i % 5 === 0;
 
             if (!$fizz && !$buzz) {
-                echo "$i";
+                echo $i;
             } else {
                 if ($fizz) {
                     echo "Fizz";
@@ -38,20 +38,21 @@ class FizzBuzz
                 echo "\n";
             }
         }
+        echo "\n";
     }
-}
 
-function promptUser(): int
-{
-    while (true) {
-        $input = readline("Enter an integer: ");
-        if (!is_numeric($input)) {
-            echo "Non-numeric input!\n";
-            continue;
+    public static function promptUser(): int
+    {
+        while (true) {
+            $input = readline("Enter an integer: ");
+            if (!is_numeric($input)) {
+                echo "Non-numeric input!\n";
+                continue;
+            }
+            return (int)$input;
         }
-        return (int)$input;
     }
 }
 
-$count = promptUser();
+$count = FizzBuzz::promptUser();
 FizzBuzz::fizzBuzz($count);
